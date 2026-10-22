@@ -10,33 +10,79 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PendenciasRouteImport } from './routes/pendencias'
+import { Route as TarefasRouteImport } from './routes/tarefas'
+import { Route as MateriasIndexRouteImport } from './routes/materias.index'
+import { Route as MateriasIdRouteImport } from './routes/materias.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PendenciasRoute = PendenciasRouteImport.update({
+  id: '/pendencias',
+  path: '/pendencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TarefasRoute = TarefasRouteImport.update({
+  id: '/tarefas',
+  path: '/tarefas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MateriasIndexRoute = MateriasIndexRouteImport.update({
+  id: '/materias/',
+  path: '/materias/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MateriasIdRoute = MateriasIdRouteImport.update({
+  id: '/materias/$id',
+  path: '/materias/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pendencias': typeof PendenciasRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias/': typeof MateriasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pendencias': typeof PendenciasRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias': typeof MateriasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pendencias': typeof PendenciasRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias/': typeof MateriasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/pendencias' | '/tarefas' | '/materias/$id' | '/materias/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/pendencias' | '/tarefas' | '/materias/$id' | '/materias'
+  id:
+    | '__root__'
+    | '/'
+    | '/pendencias'
+    | '/tarefas'
+    | '/materias/$id'
+    | '/materias/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PendenciasRoute: typeof PendenciasRoute
+  TarefasRoute: typeof TarefasRoute
+  MateriasIdRoute: typeof MateriasIdRoute
+  MateriasIndexRoute: typeof MateriasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +94,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pendencias': {
+      id: '/pendencias'
+      path: '/pendencias'
+      fullPath: '/pendencias'
+      preLoaderRoute: typeof PendenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tarefas': {
+      id: '/tarefas'
+      path: '/tarefas'
+      fullPath: '/tarefas'
+      preLoaderRoute: typeof TarefasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materias/': {
+      id: '/materias/'
+      path: '/materias'
+      fullPath: '/materias/'
+      preLoaderRoute: typeof MateriasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materias/$id': {
+      id: '/materias/$id'
+      path: '/materias/$id'
+      fullPath: '/materias/$id'
+      preLoaderRoute: typeof MateriasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PendenciasRoute: PendenciasRoute,
+  TarefasRoute: TarefasRoute,
+  MateriasIdRoute: MateriasIdRoute,
+  MateriasIndexRoute: MateriasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
