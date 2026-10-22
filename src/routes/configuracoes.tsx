@@ -34,7 +34,7 @@ function SettingsPage() {
 
   const exportAll = () => {
     const a = fromDateInput(from), b = endOfDay(fromDateInput(to));
-    if (a > b) return toast.error("A data inicial deve ser anterior à final.");
+    if (a > b) { toast.error("A data inicial deve ser anterior à final."); return; }
     const now = new Date();
     const goals = state.goals.filter((g) => new Date(g.startDate) <= b && new Date(g.endDate) >= a);
     downloadCSV(`metas_${from}_${to}.csv`, [
@@ -75,7 +75,7 @@ function SettingsPage() {
           <Field label="Pedir confirmação para sessões acima de (horas)" htmlFor="long">
             <Input id="long" type="number" min={1} step={0.5} value={longH} onChange={(e) => setLongH(e.target.value)} />
           </Field>
-          <Button variant="outline" onClick={() => { const h = Number(longH); if (!(h > 0)) return toast.error("Valor inválido."); actions.updateSettings({ longSessionMinutes: Math.round(h * 60) }); toast.success("Preferência salva."); }}>Salvar</Button>
+          <Button variant="outline" onClick={() => { const h = Number(longH); if (!(h > 0)) { toast.error("Valor inválido."); return; } actions.updateSettings({ longSessionMinutes: Math.round(h * 60) }); toast.success("Preferência salva."); }}>Salvar</Button>
           <p className="text-xs text-muted-foreground">Seus dados ficam apenas neste navegador. Limpar os dados do navegador apaga o planejamento — exporte com frequência.</p>
         </section>
       </div>
