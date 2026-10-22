@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnaliseRouteImport } from './routes/analise'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as MetasRouteImport } from './routes/metas'
+import { Route as NotificacoesRouteImport } from './routes/notificacoes'
+import { Route as PendenciasRouteImport } from './routes/pendencias'
+import { Route as SessoesRouteImport } from './routes/sessoes'
+import { Route as TarefasRouteImport } from './routes/tarefas'
+import { Route as MateriasIndexRouteImport } from './routes/materias.index'
+import { Route as MateriasIdRouteImport } from './routes/materias.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnaliseRoute = AnaliseRouteImport.update({
+  id: '/analise',
+  path: '/analise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetasRoute = MetasRouteImport.update({
+  id: '/metas',
+  path: '/metas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificacoesRoute = NotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PendenciasRoute = PendenciasRouteImport.update({
+  id: '/pendencias',
+  path: '/pendencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessoesRoute = SessoesRouteImport.update({
+  id: '/sessoes',
+  path: '/sessoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TarefasRoute = TarefasRouteImport.update({
+  id: '/tarefas',
+  path: '/tarefas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MateriasIndexRoute = MateriasIndexRouteImport.update({
+  id: '/materias/',
+  path: '/materias/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MateriasIdRoute = MateriasIdRouteImport.update({
+  id: '/materias/$id',
+  path: '/materias/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analise': typeof AnaliseRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/metas': typeof MetasRoute
+  '/notificacoes': typeof NotificacoesRoute
+  '/pendencias': typeof PendenciasRoute
+  '/sessoes': typeof SessoesRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias/': typeof MateriasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analise': typeof AnaliseRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/metas': typeof MetasRoute
+  '/notificacoes': typeof NotificacoesRoute
+  '/pendencias': typeof PendenciasRoute
+  '/sessoes': typeof SessoesRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias': typeof MateriasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analise': typeof AnaliseRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/metas': typeof MetasRoute
+  '/notificacoes': typeof NotificacoesRoute
+  '/pendencias': typeof PendenciasRoute
+  '/sessoes': typeof SessoesRoute
+  '/tarefas': typeof TarefasRoute
+  '/materias/$id': typeof MateriasIdRoute
+  '/materias/': typeof MateriasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/analise'
+    | '/configuracoes'
+    | '/metas'
+    | '/notificacoes'
+    | '/pendencias'
+    | '/sessoes'
+    | '/tarefas'
+    | '/materias/$id'
+    | '/materias/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/analise'
+    | '/configuracoes'
+    | '/metas'
+    | '/notificacoes'
+    | '/pendencias'
+    | '/sessoes'
+    | '/tarefas'
+    | '/materias/$id'
+    | '/materias'
+  id:
+    | '__root__'
+    | '/'
+    | '/analise'
+    | '/configuracoes'
+    | '/metas'
+    | '/notificacoes'
+    | '/pendencias'
+    | '/sessoes'
+    | '/tarefas'
+    | '/materias/$id'
+    | '/materias/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnaliseRoute: typeof AnaliseRoute
+  ConfiguracoesRoute: typeof ConfiguracoesRoute
+  MetasRoute: typeof MetasRoute
+  NotificacoesRoute: typeof NotificacoesRoute
+  PendenciasRoute: typeof PendenciasRoute
+  SessoesRoute: typeof SessoesRoute
+  TarefasRoute: typeof TarefasRoute
+  MateriasIdRoute: typeof MateriasIdRoute
+  MateriasIndexRoute: typeof MateriasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +169,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analise': {
+      id: '/analise'
+      path: '/analise'
+      fullPath: '/analise'
+      preLoaderRoute: typeof AnaliseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metas': {
+      id: '/metas'
+      path: '/metas'
+      fullPath: '/metas'
+      preLoaderRoute: typeof MetasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notificacoes': {
+      id: '/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/notificacoes'
+      preLoaderRoute: typeof NotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pendencias': {
+      id: '/pendencias'
+      path: '/pendencias'
+      fullPath: '/pendencias'
+      preLoaderRoute: typeof PendenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessoes': {
+      id: '/sessoes'
+      path: '/sessoes'
+      fullPath: '/sessoes'
+      preLoaderRoute: typeof SessoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tarefas': {
+      id: '/tarefas'
+      path: '/tarefas'
+      fullPath: '/tarefas'
+      preLoaderRoute: typeof TarefasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materias/': {
+      id: '/materias/'
+      path: '/materias'
+      fullPath: '/materias/'
+      preLoaderRoute: typeof MateriasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materias/$id': {
+      id: '/materias/$id'
+      path: '/materias/$id'
+      fullPath: '/materias/$id'
+      preLoaderRoute: typeof MateriasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnaliseRoute: AnaliseRoute,
+  ConfiguracoesRoute: ConfiguracoesRoute,
+  MetasRoute: MetasRoute,
+  NotificacoesRoute: NotificacoesRoute,
+  PendenciasRoute: PendenciasRoute,
+  SessoesRoute: SessoesRoute,
+  TarefasRoute: TarefasRoute,
+  MateriasIdRoute: MateriasIdRoute,
+  MateriasIndexRoute: MateriasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
