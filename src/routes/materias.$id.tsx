@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePlanner } from "@/lib/planner/store";
-import { formatMinutes, goalPhase, studyMinutes, subjectPercent } from "@/lib/planner/logic";
+import { formatMinutes, goalPhase, subjectPercent } from "@/lib/planner/logic";
 import { Bar, Chip, EmptyState, PageHeader, Stat, SubjectIcon, subjectColor } from "@/components/planner/ui";
 import { TaskDialog } from "@/components/planner/forms";
 import { TaskRow } from "@/components/planner/TaskRow";
@@ -31,7 +31,6 @@ function SubjectDetail() {
   const goals = state.goals.filter((g) => g.subjectId === id && goalPhase(g, new Date()) !== "closed");
   const p = subjectPercent(state, id);
   const total = state.sessions.filter((x) => x.subjectId === id).reduce((a, x) => a + x.durationMinutes, 0);
-  void studyMinutes;
 
   return (
     <>
