@@ -1,4 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { toast } from "sonner";
 import { periodEnd, reconcile, uid } from "./logic";
 import type {
@@ -47,7 +56,9 @@ function load(): PlannerState {
       if (k === "settings") {
         if (data && typeof data === "object") out.settings = { ...base.settings, ...data };
       } else if (Array.isArray(data)) {
-        (out as unknown as Record<string, unknown>)[k] = data.filter((x) => x && typeof x.id === "string");
+        (out as unknown as Record<string, unknown>)[k] = data.filter(
+          (x) => x && typeof x.id === "string",
+        );
       }
     } catch {
       console.warn("Dados corrompidos ignorados em", key);
@@ -68,7 +79,18 @@ function save(prev: PlannerState | null, next: PlannerState) {
 }
 
 const SUBJECT_COLORS = ["teal", "amber", "coral", "sky", "olive", "plum", "rose", "slate"];
-const SUBJECT_ICONS = ["BookOpen", "Calculator", "FlaskConical", "Globe", "Languages", "Palette", "Music", "Code", "Landmark", "Atom"];
+const SUBJECT_ICONS = [
+  "BookOpen",
+  "Calculator",
+  "FlaskConical",
+  "Globe",
+  "Languages",
+  "Palette",
+  "Music",
+  "Code",
+  "Landmark",
+  "Atom",
+];
 export { SUBJECT_COLORS, SUBJECT_ICONS };
 
 const now = () => new Date().toISOString();
@@ -82,7 +104,10 @@ export type GoalInput = {
   startDate: Date;
 };
 
-function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: () => PlannerState) {
+function makeActions(
+  set: (fn: (s: PlannerState) => PlannerState) => void,
+  get: () => PlannerState,
+) {
   return {
     addSubject(d: { name: string; description: string; color?: string; icon?: string }) {
       const n = get().subjects.length;
@@ -104,12 +129,17 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
       }));
     },
     updateSubject(id: string, d: Partial<Subject>) {
-      set((s) => ({ ...s, subjects: s.subjects.map((x) => (x.id === id ? { ...x, ...d, updatedAt: now() } : x)) }));
+      set((s) => ({
+        ...s,
+        subjects: s.subjects.map((x) => (x.id === id ? { ...x, ...d, updatedAt: now() } : x)),
+      }));
     },
     archiveSubject(id: string) {
       set((s) => ({
         ...s,
-        subjects: s.subjects.map((x) => (x.id === id ? { ...x, archived: true, updatedAt: now() } : x)),
+        subjects: s.subjects.map((x) =>
+          x.id === id ? { ...x, archived: true, updatedAt: now() } : x,
+        ),
         goals: s.goals.map((g) =>
           g.subjectId === id && g.status === "active"
             ? { ...g, status: "paused", pausedBySubjectArchive: true, updatedAt: now() }
@@ -118,13 +148,30 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
       }));
     },
     restoreSubject(id: string) {
-      set((s) => ({ ...s, subjects: s.subjects.map((x) => (x.id === id ? { ...x, archived: false, updatedAt: now() } : x)) }));
+      set((s) => ({
+        ...s,
+        subjects: s.subjects.map((x) =>
+          x.id === id ? { ...x, archived: false, updatedAt: now() } : x,
+        ),
+      }));
     },
 
     saveTask(d: Omit<Task, "id" | "createdAt" | "updatedAt" | "status"> & { id?: string }) {
       set((s) => {
-        if (d.id) return { ...s, tasks: s.tasks.map((t) => (t.id === d.id ? { ...t, ...d, id: t.id, updatedAt: now() } : t)) };
-        return { ...s, tasks: [...s.tasks, { ...d, id: uid(), status: "Pendente", createdAt: now(), updatedAt: now() }] };
+        if (d.id)
+          return {
+            ...s,
+            tasks: s.tasks.map((t) =>
+              t.id === d.id ? { ...t, ...d, id: t.id, updatedAt: now() } : t,
+            ),
+          };
+        return {
+          ...s,
+          tasks: [
+            ...s.tasks,
+            { ...d, id: uid(), status: "Pendente", createdAt: now(), updatedAt: now() },
+          ],
+        };
       });
     },
     setTaskStatus(id: string, status: Task["status"]) {
@@ -132,8 +179,14 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
         const t = s.tasks.find((x) => x.id === id);
         if (!t || t.status === status) return s;
         const completions =
-          status === "Concluída" ? [...s.completions, { id: uid(), taskId: id, completedAt: now() }] : s.completions;
-        return { ...s, completions, tasks: s.tasks.map((x) => (x.id === id ? { ...x, status, updatedAt: now() } : x)) };
+          status === "Concluída"
+            ? [...s.completions, { id: uid(), taskId: id, completedAt: now() }]
+            : s.completions;
+        return {
+          ...s,
+          completions,
+          tasks: s.tasks.map((x) => (x.id === id ? { ...x, status, updatedAt: now() } : x)),
+        };
       });
     },
     deleteTask(id: string) {
@@ -142,8 +195,17 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
 
     savePending(d: Omit<PendingItem, "id" | "createdAt" | "updatedAt"> & { id?: string }) {
       set((s) => {
-        if (d.id) return { ...s, pending: s.pending.map((p) => (p.id === d.id ? { ...p, ...d, id: p.id, updatedAt: now() } : p)) };
-        return { ...s, pending: [{ ...d, id: uid(), createdAt: now(), updatedAt: now() }, ...s.pending] };
+        if (d.id)
+          return {
+            ...s,
+            pending: s.pending.map((p) =>
+              p.id === d.id ? { ...p, ...d, id: p.id, updatedAt: now() } : p,
+            ),
+          };
+        return {
+          ...s,
+          pending: [{ ...d, id: uid(), createdAt: now(), updatedAt: now() }, ...s.pending],
+        };
       });
     },
     deletePending(id: string) {
@@ -162,7 +224,11 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
         endDate: periodEnd(d.period, start).toISOString(),
       };
       set((s) => {
-        if (id) return { ...s, goals: s.goals.map((g) => (g.id === id ? { ...g, ...fields, updatedAt: now() } : g)) };
+        if (id)
+          return {
+            ...s,
+            goals: s.goals.map((g) => (g.id === id ? { ...g, ...fields, updatedAt: now() } : g)),
+          };
         const g: StudyGoal = {
           ...fields,
           id: uid(),
@@ -177,13 +243,20 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
       });
     },
     pauseGoal(id: string) {
-      set((s) => ({ ...s, goals: s.goals.map((g) => (g.id === id && g.status === "active" ? { ...g, status: "paused", updatedAt: now() } : g)) }));
+      set((s) => ({
+        ...s,
+        goals: s.goals.map((g) =>
+          g.id === id && g.status === "active" ? { ...g, status: "paused", updatedAt: now() } : g,
+        ),
+      }));
     },
     resumeGoal(id: string) {
       set((s) => ({
         ...s,
         goals: s.goals.map((g) =>
-          g.id === id && g.status === "paused" ? { ...g, status: "active", pausedBySubjectArchive: false, updatedAt: now() } : g,
+          g.id === id && g.status === "paused"
+            ? { ...g, status: "active", pausedBySubjectArchive: false, updatedAt: now() }
+            : g,
         ),
       }));
     },
@@ -194,7 +267,14 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
           ...s,
           goals: s.goals.map((g) =>
             g.id === id
-              ? { ...g, status: "closed", closureReason: "deleted", finalProgress: progress ?? 0, closedAt: now(), updatedAt: now() }
+              ? {
+                  ...g,
+                  status: "closed",
+                  closureReason: "deleted",
+                  finalProgress: progress ?? 0,
+                  closedAt: now(),
+                  updatedAt: now(),
+                }
               : g,
           ),
         };
@@ -202,12 +282,23 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
     },
 
     startTimer(subjectId: string | null) {
-      set((s) => ({ ...s, settings: { ...s.settings, activeTimer: { subjectId, startedAt: now() } } }));
+      set((s) => ({
+        ...s,
+        settings: { ...s.settings, activeTimer: { subjectId, startedAt: now() } },
+      }));
     },
     cancelTimer() {
       set((s) => ({ ...s, settings: { ...s.settings, activeTimer: null } }));
     },
-    saveSession(d: { subjectId: string | null; startedAt: Date; endedAt: Date; source: StudySession["source"] }, id?: string) {
+    saveSession(
+      d: {
+        subjectId: string | null;
+        startedAt: Date;
+        endedAt: Date;
+        source: StudySession["source"];
+      },
+      id?: string,
+    ) {
       const durationMinutes = Math.round((d.endedAt.getTime() - d.startedAt.getTime()) / 60000);
       const fields = {
         subjectId: d.subjectId,
@@ -216,12 +307,23 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
         durationMinutes,
       };
       set((s) => {
-        const settings = d.source === "timer" && !id ? { ...s.settings, activeTimer: null } : s.settings;
-        if (id) return { ...s, settings, sessions: s.sessions.map((x) => (x.id === id ? { ...x, ...fields, updatedAt: now() } : x)) };
+        const settings =
+          d.source === "timer" && !id ? { ...s.settings, activeTimer: null } : s.settings;
+        if (id)
+          return {
+            ...s,
+            settings,
+            sessions: s.sessions.map((x) =>
+              x.id === id ? { ...x, ...fields, updatedAt: now() } : x,
+            ),
+          };
         return {
           ...s,
           settings,
-          sessions: [{ ...fields, id: uid(), source: d.source, createdAt: now(), updatedAt: now() }, ...s.sessions],
+          sessions: [
+            { ...fields, id: uid(), source: d.source, createdAt: now(), updatedAt: now() },
+            ...s.sessions,
+          ],
         };
       });
     },
@@ -230,10 +332,18 @@ function makeActions(set: (fn: (s: PlannerState) => PlannerState) => void, get: 
     },
 
     markRead(id: string) {
-      set((s) => ({ ...s, notifications: s.notifications.map((n) => (n.id === id && !n.readAt ? { ...n, readAt: now() } : n)) }));
+      set((s) => ({
+        ...s,
+        notifications: s.notifications.map((n) =>
+          n.id === id && !n.readAt ? { ...n, readAt: now() } : n,
+        ),
+      }));
     },
     markAllRead() {
-      set((s) => ({ ...s, notifications: s.notifications.map((n) => (n.readAt ? n : { ...n, readAt: now() })) }));
+      set((s) => ({
+        ...s,
+        notifications: s.notifications.map((n) => (n.readAt ? n : { ...n, readAt: now() })),
+      }));
     },
     updateSettings(d: Partial<PlannerState["settings"]>) {
       set((s) => ({ ...s, settings: { ...s.settings, ...d } }));
@@ -270,7 +380,10 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(t);
   }, [ready]);
 
-  const set = useCallback((fn: (s: PlannerState) => PlannerState) => setState((s) => reconcile(fn(s))), []);
+  const set = useCallback(
+    (fn: (s: PlannerState) => PlannerState) => setState((s) => reconcile(fn(s))),
+    [],
+  );
   const actions = useMemo(() => makeActions(set, () => ref.current), [set]);
 
   return <Ctx.Provider value={{ state, ready, actions }}>{children}</Ctx.Provider>;

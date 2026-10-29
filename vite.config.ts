@@ -15,7 +15,17 @@ export default defineConfig({
   vite: {
     // Pre-bundle client libs up front so a late dependency re-optimization can't load a second React copy.
     optimizeDeps: {
-      include: ["sonner", "recharts", "date-fns", "date-fns/locale", "lucide-react", "@radix-ui/react-dialog", "@radix-ui/react-alert-dialog", "@radix-ui/react-tabs", "@radix-ui/react-switch"],
+      include: [
+        "sonner",
+        "recharts",
+        "date-fns",
+        "date-fns/locale",
+        "lucide-react",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-alert-dialog",
+        "@radix-ui/react-tabs",
+        "@radix-ui/react-switch",
+      ],
     },
   },
 });

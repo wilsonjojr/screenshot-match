@@ -35,29 +35,108 @@ function Tasks() {
 
   const list = state.tasks
     .filter((t) => active.has(t.subjectId))
-    .filter((t) => (!subject || t.subjectId === subject) && (!status || t.status === status) && (!priority || t.priority === priority) && (!category || t.category === category))
+    .filter(
+      (t) =>
+        (!subject || t.subjectId === subject) &&
+        (!status || t.status === status) &&
+        (!priority || t.priority === priority) &&
+        (!category || t.category === category),
+    )
     .filter((t) => !q || (t.title + t.description).toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) =>
-      sort === "priority" ? PRI_ORDER[a.priority] - PRI_ORDER[b.priority] : sort === "recent" ? b.createdAt.localeCompare(a.createdAt) : (a.dueDate ?? "9999").localeCompare(b.dueDate ?? "9999"),
+      sort === "priority"
+        ? PRI_ORDER[a.priority] - PRI_ORDER[b.priority]
+        : sort === "recent"
+          ? b.createdAt.localeCompare(a.createdAt)
+          : (a.dueDate ?? "9999").localeCompare(b.dueDate ?? "9999"),
     );
 
   return (
     <>
-      <PageHeader title="Tarefas" subtitle="Tudo o que você precisa fazer, por matéria." actions={<TaskDialog trigger={<Button><Plus className="h-4 w-4" /> Nova tarefa</Button>} />} />
+      <PageHeader
+        title="Tarefas"
+        subtitle="Tudo o que você precisa fazer, por matéria."
+        actions={
+          <TaskDialog
+            trigger={
+              <Button>
+                <Plus className="h-4 w-4" /> Nova tarefa
+              </Button>
+            }
+          />
+        }
+      />
       <div className="mb-6 flex flex-wrap gap-2">
-        <Input placeholder="Buscar…" value={q} onChange={(e) => setQ(e.target.value)} className="w-48" aria-label="Buscar tarefas" />
-        <NativeSelect aria-label="Matéria" value={subject} onChange={(e) => setSubject(e.target.value)}>
+        <Input
+          placeholder="Buscar…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          className="w-48"
+          aria-label="Buscar tarefas"
+        />
+        <NativeSelect
+          aria-label="Matéria"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+        >
           <option value="">Todas as matérias</option>
-          {state.subjects.filter((s) => !s.archived).map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+          {state.subjects
+            .filter((s) => !s.archived)
+            .map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
         </NativeSelect>
-        <NativeSelect aria-label="Status" value={status} onChange={(e) => setStatus(e.target.value)}><option value="">Todos os status</option>{TASK_STATUSES.map((s) => <option key={s}>{s}</option>)}</NativeSelect>
-        <NativeSelect aria-label="Prioridade" value={priority} onChange={(e) => setPriority(e.target.value)}><option value="">Todas as prioridades</option>{PRIORITIES.map((s) => <option key={s}>{s}</option>)}</NativeSelect>
-        <NativeSelect aria-label="Categoria" value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Todas as categorias</option>{TASK_CATEGORIES.map((s) => <option key={s}>{s}</option>)}</NativeSelect>
+        <NativeSelect
+          aria-label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="">Todos os status</option>
+          {TASK_STATUSES.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </NativeSelect>
+        <NativeSelect
+          aria-label="Prioridade"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="">Todas as prioridades</option>
+          {PRIORITIES.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </NativeSelect>
+        <NativeSelect
+          aria-label="Categoria"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Todas as categorias</option>
+          {TASK_CATEGORIES.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </NativeSelect>
         <NativeSelect aria-label="Ordenar" value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="due">Ordenar por prazo</option><option value="priority">Por prioridade</option><option value="recent">Mais recentes</option>
+          <option value="due">Ordenar por prazo</option>
+          <option value="priority">Por prioridade</option>
+          <option value="recent">Mais recentes</option>
         </NativeSelect>
       </div>
-      {list.length ? <div className="grid gap-3">{list.map((t) => <TaskRow key={t.id} task={t} />)}</div> : <EmptyState icon={CheckSquare} title="Nenhuma tarefa encontrada" text="Crie uma tarefa ou ajuste os filtros." />}
+      {list.length ? (
+        <div className="grid gap-3">
+          {list.map((t) => (
+            <TaskRow key={t.id} task={t} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          icon={CheckSquare}
+          title="Nenhuma tarefa encontrada"
+          text="Crie uma tarefa ou ajuste os filtros."
+        />
+      )}
     </>
   );
 }

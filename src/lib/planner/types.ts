@@ -6,7 +6,14 @@ export type GoalPeriod = "daily" | "weekly" | "monthly";
 export type GoalStatus = "active" | "paused" | "closed";
 export type ClosureReason = "achieved" | "expired" | "deleted";
 
-export const TASK_CATEGORIES = ["Leitura", "Exercícios", "Aula", "Revisão", "Projeto", "Prova"] as const;
+export const TASK_CATEGORIES = [
+  "Leitura",
+  "Exercícios",
+  "Aula",
+  "Revisão",
+  "Projeto",
+  "Prova",
+] as const;
 export const PRIORITIES: Priority[] = ["Baixa", "Média", "Alta"];
 export const TASK_STATUSES: TaskStatus[] = ["Pendente", "Em andamento", "Concluída"];
 export const PENDING_STATUSES: PendingStatus[] = ["Aberta", "Em andamento", "Resolvida"];

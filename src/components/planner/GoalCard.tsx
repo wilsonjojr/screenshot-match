@@ -29,27 +29,72 @@ export function GoalCard({ goal, compact }: { goal: StudyGoal; compact?: boolean
       <div>
         <div className="mb-1.5 flex items-baseline justify-between text-sm">
           <span>
-            <strong>{goal.type === "subject" && progress === null ? "Sem tarefas" : formatGoalValue(goal.type, progress)}</strong>
-            <span className="text-muted-foreground"> de {formatGoalValue(goal.type, goal.targetValue)}</span>
+            <strong>
+              {goal.type === "subject" && progress === null
+                ? "Sem tarefas"
+                : formatGoalValue(goal.type, progress)}
+            </strong>
+            <span className="text-muted-foreground">
+              {" "}
+              de {formatGoalValue(goal.type, goal.targetValue)}
+            </span>
           </span>
-          <span className="font-semibold text-primary">{pct === null ? "—" : `${Math.round(pct)}%`}</span>
+          <span className="font-semibold text-primary">
+            {pct === null ? "—" : `${Math.round(pct)}%`}
+          </span>
         </div>
         <Bar value={pct} />
       </div>
       <p className="text-xs text-muted-foreground">
-        {format(new Date(goal.startDate), "dd/MM/yyyy")} – {format(new Date(goal.endDate), "dd/MM/yyyy")}
-        {goal.pausedBySubjectArchive && phase === "paused" && " · pausada porque a matéria foi arquivada"}
+        {format(new Date(goal.startDate), "dd/MM/yyyy")} –{" "}
+        {format(new Date(goal.endDate), "dd/MM/yyyy")}
+        {goal.pausedBySubjectArchive &&
+          phase === "paused" &&
+          " · pausada porque a matéria foi arquivada"}
       </p>
       {!compact && (
         <div className="flex flex-wrap gap-1">
-          <GoalDialog goal={goal} trigger={<Button size="sm" variant="ghost"><Pencil className="h-3.5 w-3.5" /> Editar</Button>} />
-          {phase === "active" && <Button size="sm" variant="ghost" onClick={() => actions.pauseGoal(goal.id)}><Pause className="h-3.5 w-3.5" /> Pausar</Button>}
-          {phase === "paused" && <Button size="sm" variant="ghost" onClick={() => actions.resumeGoal(goal.id)}><Play className="h-3.5 w-3.5" /> Retomar</Button>}
-          {phase !== "scheduled" && <GoalDialog goal={goal} duplicate trigger={<Button size="sm" variant="ghost"><Copy className="h-3.5 w-3.5" /> Duplicar</Button>} />}
+          <GoalDialog
+            goal={goal}
+            trigger={
+              <Button size="sm" variant="ghost">
+                <Pencil className="h-3.5 w-3.5" /> Editar
+              </Button>
+            }
+          />
+          {phase === "active" && (
+            <Button size="sm" variant="ghost" onClick={() => actions.pauseGoal(goal.id)}>
+              <Pause className="h-3.5 w-3.5" /> Pausar
+            </Button>
+          )}
+          {phase === "paused" && (
+            <Button size="sm" variant="ghost" onClick={() => actions.resumeGoal(goal.id)}>
+              <Play className="h-3.5 w-3.5" /> Retomar
+            </Button>
+          )}
+          {phase !== "scheduled" && (
+            <GoalDialog
+              goal={goal}
+              duplicate
+              trigger={
+                <Button size="sm" variant="ghost">
+                  <Copy className="h-3.5 w-3.5" /> Duplicar
+                </Button>
+              }
+            />
+          )}
           <Confirm
-            trigger={<Button size="sm" variant="ghost" className="text-destructive"><Trash2 className="h-3.5 w-3.5" /> Excluir</Button>}
+            trigger={
+              <Button size="sm" variant="ghost" className="text-destructive">
+                <Trash2 className="h-3.5 w-3.5" /> Excluir
+              </Button>
+            }
             title="Excluir meta?"
-            text={phase === "scheduled" ? "A meta agendada será removida." : "A meta será encerrada e ficará registrada no histórico como excluída."}
+            text={
+              phase === "scheduled"
+                ? "A meta agendada será removida."
+                : "A meta será encerrada e ficará registrada no histórico como excluída."
+            }
             confirmLabel="Excluir"
             onConfirm={() => actions.deleteGoal(goal.id, progress, phase === "scheduled")}
           />

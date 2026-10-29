@@ -54,7 +54,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <n.icon className={cn("h-4 w-4", isActive(n.to) && "text-sidebar-primary")} />
               {n.label}
               {n.to === "/notificacoes" && unread > 0 && (
-                <span className="ml-auto rounded-full bg-sidebar-primary px-1.5 text-xs font-bold text-sidebar-primary-foreground">{unread}</span>
+                <span className="ml-auto rounded-full bg-sidebar-primary px-1.5 text-xs font-bold text-sidebar-primary-foreground">
+                  {unread}
+                </span>
               )}
             </Link>
           ))}
@@ -67,12 +69,25 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className="font-display text-lg font-semibold">Caderno</span>
           <Link to="/notificacoes" className="relative" aria-label="Notificações">
             <Bell className="h-5 w-5" />
-            {unread > 0 && <span className="absolute -right-1.5 -top-1.5 rounded-full bg-sidebar-primary px-1 text-[10px] font-bold text-sidebar-primary-foreground">{unread}</span>}
+            {unread > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 rounded-full bg-sidebar-primary px-1 text-[10px] font-bold text-sidebar-primary-foreground">
+                {unread}
+              </span>
+            )}
           </Link>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-2 pb-2">
           {NAV.filter((n) => n.to !== "/notificacoes").map((n) => (
-            <Link key={n.to} to={n.to} className={cn("shrink-0 rounded-full px-3 py-1 text-xs", isActive(n.to) ? "bg-sidebar-primary text-sidebar-primary-foreground" : "bg-sidebar-accent")}>
+            <Link
+              key={n.to}
+              to={n.to}
+              className={cn(
+                "shrink-0 rounded-full px-3 py-1 text-xs",
+                isActive(n.to)
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "bg-sidebar-accent",
+              )}
+            >
               {n.label}
             </Link>
           ))}
@@ -80,7 +95,13 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       <main className="flex-1 px-4 py-8 pb-28 md:px-10">
-        <div className="mx-auto max-w-6xl">{ready ? children : <div className="py-20 text-center text-muted-foreground">Carregando seus dados…</div>}</div>
+        <div className="mx-auto max-w-6xl">
+          {ready ? (
+            children
+          ) : (
+            <div className="py-20 text-center text-muted-foreground">Carregando seus dados…</div>
+          )}
+        </div>
       </main>
       {ready && <TimerWidget />}
     </div>

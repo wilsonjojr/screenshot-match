@@ -14,7 +14,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { Subject } from "@/lib/planner/types";
 
-export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+}: {
+  title: string;
+  subtitle?: string;
+  actions?: ReactNode;
+}) {
   return (
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -26,7 +34,17 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   );
 }
 
-export function EmptyState({ icon: Icon = Icons.Inbox, title, text, action }: { icon?: Icons.LucideIcon; title: string; text: string; action?: ReactNode }) {
+export function EmptyState({
+  icon: Icon = Icons.Inbox,
+  title,
+  text,
+  action,
+}: {
+  icon?: Icons.LucideIcon;
+  title: string;
+  text: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="flex flex-col items-center rounded-xl border border-dashed border-border px-6 py-12 text-center">
       <Icon className="mb-3 h-8 w-8 text-muted-foreground" />
@@ -37,7 +55,19 @@ export function EmptyState({ icon: Icon = Icons.Inbox, title, text, action }: { 
   );
 }
 
-export function Confirm({ trigger, title, text, confirmLabel = "Confirmar", onConfirm }: { trigger: ReactNode; title: string; text: string; confirmLabel?: string; onConfirm: () => void }) {
+export function Confirm({
+  trigger,
+  title,
+  text,
+  confirmLabel = "Confirmar",
+  onConfirm,
+}: {
+  trigger: ReactNode;
+  title: string;
+  text: string;
+  confirmLabel?: string;
+  onConfirm: () => void;
+}) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
@@ -67,10 +97,22 @@ export function NativeSelect({ className, ...p }: SelectHTMLAttributes<HTMLSelec
   );
 }
 
-export function Field({ label, htmlFor, children, error }: { label: string; htmlFor?: string; children: ReactNode; error?: string }) {
+export function Field({
+  label,
+  htmlFor,
+  children,
+  error,
+}: {
+  label: string;
+  htmlFor?: string;
+  children: ReactNode;
+  error?: string;
+}) {
   return (
     <div className="grid gap-1.5">
-      <label htmlFor={htmlFor} className="text-sm font-medium">{label}</label>
+      <label htmlFor={htmlFor} className="text-sm font-medium">
+        {label}
+      </label>
       {children}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
@@ -82,10 +124,14 @@ export function subjectColor(color?: string) {
 }
 
 export function SubjectIcon({ subject, className }: { subject?: Subject; className?: string }) {
-  const I = ((subject && (Icons as unknown as Record<string, Icons.LucideIcon>)[subject.icon]) || Icons.BookOpen) as Icons.LucideIcon;
+  const I = ((subject && (Icons as unknown as Record<string, Icons.LucideIcon>)[subject.icon]) ||
+    Icons.BookOpen) as Icons.LucideIcon;
   return (
     <span
-      className={cn("inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-primary-foreground", className)}
+      className={cn(
+        "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-primary-foreground",
+        className,
+      )}
       style={{ background: subjectColor(subject?.color) }}
     >
       <I className="h-4 w-4" />
@@ -95,13 +141,32 @@ export function SubjectIcon({ subject, className }: { subject?: Subject; classNa
 
 export function Bar({ value, color }: { value: number | null; color?: string }) {
   return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={value ?? 0} aria-valuemin={0} aria-valuemax={100}>
-      <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${value ?? 0}%`, background: color }} />
+    <div
+      className="h-2 w-full overflow-hidden rounded-full bg-muted"
+      role="progressbar"
+      aria-valuenow={value ?? 0}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      <div
+        className="h-full rounded-full bg-primary transition-all"
+        style={{ width: `${value ?? 0}%`, background: color }}
+      />
     </div>
   );
 }
 
-export function Stat({ label, value, hint, icon: Icon }: { label: string; value: ReactNode; hint?: string; icon: Icons.LucideIcon }) {
+export function Stat({
+  label,
+  value,
+  hint,
+  icon: Icon,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: string;
+  icon: Icons.LucideIcon;
+}) {
   return (
     <div className="paper-card p-5">
       <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -114,7 +179,13 @@ export function Stat({ label, value, hint, icon: Icon }: { label: string; value:
   );
 }
 
-export function Chip({ children, tone = "muted" }: { children: ReactNode; tone?: "muted" | "primary" | "accent" | "destructive" | "success" }) {
+export function Chip({
+  children,
+  tone = "muted",
+}: {
+  children: ReactNode;
+  tone?: "muted" | "primary" | "accent" | "destructive" | "success";
+}) {
   const tones = {
     muted: "bg-muted text-muted-foreground",
     primary: "bg-primary/10 text-primary",
@@ -122,5 +193,14 @@ export function Chip({ children, tone = "muted" }: { children: ReactNode; tone?:
     destructive: "bg-destructive/10 text-destructive",
     success: "bg-success/15 text-success",
   };
-  return <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium", tones[tone])}>{children}</span>;
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium",
+        tones[tone],
+      )}
+    >
+      {children}
+    </span>
+  );
 }

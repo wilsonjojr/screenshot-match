@@ -21,8 +21,7 @@ import type {
   StudySession,
 } from "./types";
 
-export const uid = () =>
-  Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+export const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 
 const WEEK = { weekStartsOn: 1 as const };
 
@@ -80,7 +79,12 @@ export function studiedDays(state: PlannerState, from: Date, to: Date, subjectId
 }
 
 /** Distinct existing tasks with at least one completion inside the window. */
-export function completedTasks(state: PlannerState, from: Date, to: Date, subjectId?: string | null) {
+export function completedTasks(
+  state: PlannerState,
+  from: Date,
+  to: Date,
+  subjectId?: string | null,
+) {
   const taskMap = new Map(state.tasks.map((t) => [t.id, t]));
   const ids = new Set<string>();
   for (const c of state.completions) {
@@ -215,10 +219,18 @@ export interface Bucket {
 export function buildBuckets(grouping: Grouping, from: Date, to: Date): Bucket[] {
   const out: Bucket[] = [];
   let cur =
-    grouping === "day" ? startOfDay(from) : grouping === "week" ? startOfWeek(from, WEEK) : startOfMonth(from);
+    grouping === "day"
+      ? startOfDay(from)
+      : grouping === "week"
+        ? startOfWeek(from, WEEK)
+        : startOfMonth(from);
   while (cur <= to && out.length < 400) {
     const end =
-      grouping === "day" ? endOfDay(cur) : grouping === "week" ? endOfWeek(cur, WEEK) : endOfMonth(cur);
+      grouping === "day"
+        ? endOfDay(cur)
+        : grouping === "week"
+          ? endOfWeek(cur, WEEK)
+          : endOfMonth(cur);
     const label =
       grouping === "day"
         ? format(cur, "dd/MM", { locale: ptBR })
@@ -226,14 +238,20 @@ export function buildBuckets(grouping: Grouping, from: Date, to: Date): Bucket[]
           ? `${format(cur, "dd/MM")}–${format(end, "dd/MM")}`
           : format(cur, "MMM/yy", { locale: ptBR });
     out.push({ label, from: cur, to: end });
-    cur = grouping === "day" ? addDays(cur, 1) : grouping === "week" ? addWeeks(cur, 1) : addMonths(cur, 1);
+    cur =
+      grouping === "day"
+        ? addDays(cur, 1)
+        : grouping === "week"
+          ? addWeeks(cur, 1)
+          : addMonths(cur, 1);
   }
   return out;
 }
 
 export function lastSevenRange(grouping: Grouping, now = new Date()) {
   if (grouping === "day") return { from: startOfDay(addDays(now, -6)), to: endOfDay(now) };
-  if (grouping === "week") return { from: startOfWeek(addWeeks(now, -6), WEEK), to: endOfWeek(now, WEEK) };
+  if (grouping === "week")
+    return { from: startOfWeek(addWeeks(now, -6), WEEK), to: endOfWeek(now, WEEK) };
   return { from: startOfMonth(addMonths(now, -6)), to: endOfMonth(now) };
 }
 
@@ -275,7 +293,8 @@ export function percentChange(a: number | null, b: number | null): number | null
 /** Consecutive studied days ending today or yesterday. */
 export function studyStreak(state: PlannerState, now = new Date()) {
   const days = new Set<string>();
-  for (const s of state.sessions) if (s.subjectId) for (const d of minutesByDay(s).keys()) days.add(d);
+  for (const s of state.sessions)
+    if (s.subjectId) for (const d of minutesByDay(s).keys()) days.add(d);
   let cur = startOfDay(now);
   if (!days.has(format(cur, "yyyy-MM-dd"))) cur = addDays(cur, -1);
   let n = 0;

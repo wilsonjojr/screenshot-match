@@ -35,8 +35,15 @@ export function TimerWidget() {
       toast.error("A sessão precisa ter pelo menos 1 minuto.");
       return;
     }
-    actions.saveSession({ subjectId: timer.subjectId, startedAt: start, endedAt: end, source: "timer" });
-    toast.success(`Sessão de ${formatMinutes(Math.round((end.getTime() - start.getTime()) / 60000))} registrada.`);
+    actions.saveSession({
+      subjectId: timer.subjectId,
+      startedAt: start,
+      endedAt: end,
+      source: "timer",
+    });
+    toast.success(
+      `Sessão de ${formatMinutes(Math.round((end.getTime() - start.getTime()) / 60000))} registrada.`,
+    );
   };
 
   const stop = () => {
@@ -54,24 +61,49 @@ export function TimerWidget() {
       {timer ? (
         <>
           <span className="h-2 w-2 animate-pulse rounded-full bg-destructive" />
-          <span className="font-mono text-sm tabular-nums">{fmt(tick - new Date(timer.startedAt).getTime())}</span>
-          <span className="hidden max-w-32 truncate text-xs text-muted-foreground sm:inline">{subject?.name ?? "Sem matéria"}</span>
+          <span className="font-mono text-sm tabular-nums">
+            {fmt(tick - new Date(timer.startedAt).getTime())}
+          </span>
+          <span className="hidden max-w-32 truncate text-xs text-muted-foreground sm:inline">
+            {subject?.name ?? "Sem matéria"}
+          </span>
           <Confirm
-            trigger={<Button size="icon" variant="ghost" aria-label="Descartar sessão"><X className="h-4 w-4" /></Button>}
+            trigger={
+              <Button size="icon" variant="ghost" aria-label="Descartar sessão">
+                <X className="h-4 w-4" />
+              </Button>
+            }
             title="Descartar sessão?"
             text="O tempo cronometrado não será registrado."
             confirmLabel="Descartar"
             onConfirm={actions.cancelTimer}
           />
-          <Button size="sm" className="rounded-full" onClick={stop}><Square className="h-3.5 w-3.5" /> Encerrar</Button>
+          <Button size="sm" className="rounded-full" onClick={stop}>
+            <Square className="h-3.5 w-3.5" /> Encerrar
+          </Button>
         </>
       ) : (
         <>
-          <NativeSelect aria-label="Matéria da sessão" value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className="h-8 max-w-40 rounded-full">
+          <NativeSelect
+            aria-label="Matéria da sessão"
+            value={subjectId}
+            onChange={(e) => setSubjectId(e.target.value)}
+            className="h-8 max-w-40 rounded-full"
+          >
             <option value="">Sem matéria</option>
-            {subjects.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            {subjects.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
           </NativeSelect>
-          <Button size="sm" className="rounded-full" onClick={() => actions.startTimer(subjectId || null)}><Play className="h-3.5 w-3.5" /> Estudar</Button>
+          <Button
+            size="sm"
+            className="rounded-full"
+            onClick={() => actions.startTimer(subjectId || null)}
+          >
+            <Play className="h-3.5 w-3.5" /> Estudar
+          </Button>
         </>
       )}
       <LongSessionDialog
@@ -79,7 +111,10 @@ export function TimerWidget() {
         start={timer ? new Date(timer.startedAt) : null}
         end={pendingEnd}
         onClose={() => setPendingEnd(null)}
-        onConfirm={(end) => { finish(end); setPendingEnd(null); }}
+        onConfirm={(end) => {
+          finish(end);
+          setPendingEnd(null);
+        }}
       />
     </div>
   );
